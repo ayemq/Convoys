@@ -16,14 +16,14 @@ const mockFriends = [
     username: 'FastFury',
     carPhoto: undefined,
     mood: 'Racing',
-    location: { latitude: 37.779, longitude: -122.42 },
+    location: { latitude: 40.96, longitude: -74.07 },
   },
   {
     id: '2',
     username: 'PhotoQueen',
     carPhoto: undefined,
     mood: 'Photoshoot',
-    location: { latitude: 37.77, longitude: -122.41 },
+    location: { latitude: 40.95, longitude: -74.08 },
   },
 ];
 const mockEvents = [
@@ -32,14 +32,14 @@ const mockEvents = [
     name: 'Cars & Coffee',
     type: 'cars_and_coffee',
     verified: true,
-    location: { latitude: 37.775, longitude: -122.418 },
+    location: { latitude: 40.957, longitude: -74.06 },
   },
   {
     id: 'e2',
     name: 'Photo Meet',
     type: 'photo_meet',
     verified: false,
-    location: { latitude: 37.772, longitude: -122.415 },
+    location: { latitude: 40.96, longitude: -74.09 },
   },
 ];
 
@@ -51,7 +51,7 @@ const ExploreDriverMapScreen = () => {
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
 
   // Example: fixed user location (San Francisco)
-  const userLocation = { latitude: 37.7749, longitude: -122.4194 };
+  const userLocation = { latitude: 40.9584, longitude: -74.0723 };
 
   return (
     <View style={[styles.container, { backgroundColor: isDark ? '#181C24' : '#f5f5f5' }]}> 

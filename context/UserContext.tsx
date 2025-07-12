@@ -12,6 +12,8 @@ export interface DriverProfile {
   modList: string;
   horsepower: string;
   mood: Mood;
+  bio: string;
+  profileSetupComplete: boolean;
 }
 
 export interface ClubProfile {
@@ -57,7 +59,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const removeFriend = (id: string) => setFriends((prev) => prev.filter(f => f.id !== id));
   const updateMood = (mood: Mood) => {
     if (!profile) return;
-    setProfile({ ...profile, mood } as UserProfile);
+    setProfile({ ...profile, mood, bio: 'bio' in profile ? profile.bio : '', profileSetupComplete: 'profileSetupComplete' in profile ? profile.profileSetupComplete : false } as UserProfile);
   };
   const sendFriendRequest = (friend: Friend) => setPendingRequests((prev) => [...prev, friend]);
   const acceptFriendRequest = (id: string) => {

@@ -1,42 +1,194 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useTheme } from '../context/ThemeContext';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
-
-const accentOptions = [
-  { label: 'Orange', value: 'orange', color: '#FF9100' },
-  { label: 'Blue', value: 'blue', color: '#2196F3' },
-  { label: 'Red', value: 'red', color: '#F44336' },
-  { label: 'Purple', value: 'purple', color: '#9C27B0' },
-];
+import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../context/ThemeContext';
+import { useNavigation } from '@react-navigation/native';
 
 const SettingsScreen = () => {
-  const { isDark, toggleTheme, accent, setAccent } = useTheme();
+  const { isDark, accent, toggleTheme, setAccent } = useTheme();
+  const navigation = useNavigation();
+
+  const accentColor = accent === 'orange' ? '#FF6B35' : 
+                     accent === 'blue' ? '#4ECDC4' : 
+                     accent === 'red' ? '#FF6B6B' : '#A8E6CF';
+
+  const gradientColors = isDark 
+    ? ['#1A1A2E', '#16213E', '#0F3460'] as const
+    : ['#667eea', '#764ba2', '#f093fb'] as const;
+
+  const settingsSections = [
+    {
+      title: 'Appearance',
+      items: [
+        {
+          icon: 'moon',
+          title: 'Dark Mode',
+          subtitle: 'Toggle dark theme',
+          type: 'switch',
+          value: isDark,
+          onPress: toggleTheme,
+        },
+        {
+          icon: 'color-palette',
+          title: 'Accent Color',
+          subtitle: `Current: ${accent}`,
+          type: 'select',
+          onPress: () => {
+            const colors = ['orange', 'blue', 'red', 'green'];
+            const currentIndex = colors.indexOf(accent);
+            const nextIndex = (currentIndex + 1) % colors.length;
+            setAccent(colors[nextIndex] as any);
+          },
+        },
+      ],
+    },
+    {
+      title: 'Account',
+      items: [
+        {
+          icon: 'person',
+          title: 'Profile',
+          subtitle: 'Edit your profile',
+          type: 'navigate',
+          onPress: () => navigation.navigate('UserProfile' as never),
+        },
+        {
+          icon: 'notifications',
+          title: 'Notifications',
+          subtitle: 'Manage notifications',
+          type: 'navigate',
+          onPress: () => {},
+        },
+        {
+          icon: 'shield-checkmark',
+          title: 'Privacy',
+          subtitle: 'Privacy settings',
+          type: 'navigate',
+          onPress: () => {},
+        },
+      ],
+    },
+    {
+      title: 'App',
+      items: [
+        {
+          icon: 'help-circle',
+          title: 'Help & Support',
+          subtitle: 'Get help and contact support',
+          type: 'navigate',
+          onPress: () => {},
+        },
+        {
+          icon: 'information-circle',
+          title: 'About',
+          subtitle: 'App version and info',
+          type: 'navigate',
+          onPress: () => {},
+        },
+        {
+          icon: 'share-social',
+          title: 'Share App',
+          subtitle: 'Share with friends',
+          type: 'navigate',
+          onPress: () => {},
+        },
+      ],
+    },
+    {
+      title: 'Data',
+      items: [
+        {
+          icon: 'download',
+          title: 'Export Data',
+          subtitle: 'Download your data',
+          type: 'navigate',
+          onPress: () => {},
+        },
+        {
+          icon: 'trash',
+          title: 'Delete Account',
+          subtitle: 'Permanently delete account',
+          type: 'navigate',
+          onPress: () => {},
+          destructive: true,
+        },
+      ],
+    },
+  ];
+
+  const renderSettingItem = (item: any) => (
+    <TouchableOpacity 
+      key={item.title}
+      style={styles.settingItem}
+      onPress={item.onPress}
+      disabled={item.type === 'switch'}
+    >
+      <View style={styles.settingIcon}>
+        <Ionicons 
+          name={item.icon as any} 
+          size={20} 
+          color={item.destructive ? '#FF6B6B' : accentColor} 
+        />
+      </View>
+      <View style={styles.settingContent}>
+        <Text style={[styles.settingTitle, item.destructive && styles.destructiveText]}>
+          {item.title}
+        </Text>
+        <Text style={styles.settingSubtitle}>{item.subtitle}</Text>
+      </View>
+      {item.type === 'switch' ? (
+        <Switch
+          value={item.value}
+          onValueChange={item.onPress}
+          trackColor={{ false: '#767577', true: accentColor }}
+          thumbColor={item.value ? '#fff' : '#f4f3f4'}
+        />
+      ) : (
+        <Ionicons name="chevron-forward" size={20} color="rgba(255,255,255,0.5)" />
+      )}
+    </TouchableOpacity>
+  );
+
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#181C24' : '#f5f5f5' }]}> 
-      <BlurView intensity={70} tint={isDark ? 'dark' : 'light'} style={styles.card}>
-        <Text style={styles.title}>Settings</Text>
-        <View style={styles.section}>
-          <Text style={styles.label}>Theme</Text>
-          <TouchableOpacity style={styles.toggleBtn} onPress={toggleTheme}>
-            <Text style={styles.toggleText}>{isDark ? 'Dark Mode' : 'Light Mode'}</Text>
+    <View style={[styles.container, { backgroundColor: isDark ? '#0A0A0A' : '#F8F9FA' }]}>
+      {/* Header with gradient background */}
+      <LinearGradient colors={gradientColors} style={styles.headerGradient}>
+        <View style={styles.headerContent}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#fff" />
           </TouchableOpacity>
+          <Text style={styles.headerTitle}>Settings</Text>
+          <View style={styles.placeholderButton} />
         </View>
-        <View style={styles.section}>
-          <Text style={styles.label}>Accent Color</Text>
-          <View style={styles.accentRow}>
-            {accentOptions.map(opt => (
-              <TouchableOpacity
-                key={opt.value}
-                style={[styles.accentBtn, { backgroundColor: opt.color, borderWidth: accent === opt.value ? 3 : 1, borderColor: accent === opt.value ? '#fff' : '#888' }]}
-                onPress={() => setAccent(opt.value as any)}
-              >
-                <Text style={styles.accentLabel}>{opt.label}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+      </LinearGradient>
+
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {settingsSections.map(section => (
+          <BlurView key={section.title} intensity={80} tint={isDark ? 'dark' : 'light'} style={styles.sectionCard}>
+            <Text style={styles.sectionTitle}>{section.title}</Text>
+            {section.items.map(renderSettingItem)}
+          </BlurView>
+        ))}
+
+        {/* Logout Button */}
+        <TouchableOpacity 
+          style={[styles.logoutBtn, { backgroundColor: '#FF6B6B' }]}
+          onPress={() => {}}
+        >
+          <Ionicons name="log-out" size={20} color="#fff" />
+          <Text style={styles.logoutText}>Log Out</Text>
+        </TouchableOpacity>
+
+        <View style={styles.footer}>
+          <Text style={styles.versionText}>Convoys v1.0.0</Text>
+          <Text style={styles.copyrightText}>© 2024 Convoys App</Text>
         </View>
-      </BlurView>
+      </ScrollView>
     </View>
   );
 };
@@ -44,66 +196,120 @@ const SettingsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 32,
   },
-  card: {
-    width: 340,
-    padding: 28,
-    borderRadius: 28,
-    backgroundColor: 'rgba(24,28,36,0.55)',
-    shadowColor: '#000',
-    shadowOpacity: 0.18,
-    shadowRadius: 12,
-    shadowOffset: { width: 0, height: 6 },
-    alignItems: 'center',
+  headerGradient: {
+    paddingTop: 60,
+    paddingBottom: 20,
   },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 24,
-    color: '#fff',
-    marginBottom: 18,
-  },
-  section: {
-    marginBottom: 24,
-    width: '100%',
-    alignItems: 'center',
-  },
-  label: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  toggleBtn: {
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    borderRadius: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    marginTop: 4,
-  },
-  toggleText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  accentRow: {
+  headerContent: {
     flexDirection: 'row',
-    marginTop: 8,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
   },
-  accentBtn: {
-    borderRadius: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    marginHorizontal: 6,
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  accentLabel: {
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  placeholderButton: {
+    width: 40,
+    height: 40,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 40,
+  },
+  sectionCard: {
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 5,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 16,
+  },
+  settingItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.1)',
+  },
+  settingIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  settingContent: {
+    flex: 1,
+  },
+  settingTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#fff',
+    marginBottom: 2,
+  },
+  settingSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.7)',
+  },
+  destructiveText: {
+    color: '#FF6B6B',
+  },
+  logoutBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 16,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  logoutText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
+    marginLeft: 8,
+  },
+  footer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  versionText: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.7)',
+    marginBottom: 4,
+  },
+  copyrightText: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.5)',
   },
 });
 
