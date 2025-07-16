@@ -5,11 +5,8 @@ import { useTheme } from '../context/ThemeContext';
 import ConvoyLeaderboard from '../components/ConvoyLeaderboard';
 import PitStopRequest from '../components/PitStopRequest';
 
-const mockMembers = [
-  { id: '1', username: 'You', topSpeed: 80, miles: 12 },
-  { id: '2', username: 'FastFury', topSpeed: 95, miles: 15 },
-  { id: '3', username: 'PhotoQueen', topSpeed: 70, miles: 10 },
-];
+// TODO: Replace with backend convoy members fetch
+const members: any[] = []; // Placeholder for convoy members from backend
 
 const ConvoyDashboardScreen = () => {
   const { isDark, accent } = useTheme();
@@ -17,27 +14,29 @@ const ConvoyDashboardScreen = () => {
     accent === 'orange' ? '#FF9100' : accent === 'blue' ? '#2196F3' : accent === 'red' ? '#F44336' : '#9C27B0';
 
   return (
-    <ScrollView style={{ backgroundColor: isDark ? '#181C24' : '#f5f5f5' }} contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.container}> 
-        <BlurView intensity={70} tint={isDark ? 'dark' : 'light'} style={styles.card}>
-          <Text style={[styles.title, { color: accentColor }]}>Convoy Dashboard</Text>
-          <Text style={styles.label}>Leader: You</Text>
-          <Text style={styles.label}>Route: San Francisco → Santa Cruz</Text>
-          <Text style={styles.label}>Members</Text>
-          <View style={styles.membersRow}>
-            {mockMembers.map(m => (
-              <View key={m.id} style={styles.memberBubble}>
-                <Text style={styles.memberText}>{m.username}</Text>
+    <ScrollView style={{ flex: 1, backgroundColor: '#000' }} contentContainerStyle={{ padding: 32 }}>
+      <Text style={{ color: '#fff', fontSize: 28, fontWeight: 'bold', marginBottom: 24, textAlign: 'left' }}>Convoy Dashboard</Text>
+      <View style={{ backgroundColor: '#18181b', borderRadius: 20, padding: 24, marginBottom: 24 }}>
+        <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 8, textAlign: 'left' }}>Leader: You</Text>
+        <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 8, textAlign: 'left' }}>Route: San Francisco → Santa Cruz</Text>
+        <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 8, textAlign: 'left' }}>Members</Text>
+        <View style={{ flexDirection: 'row', marginBottom: 18 }}>
+          {members.length === 0 ? (
+            <Text style={{ color: '#aaa', fontSize: 16 }}>No members yet. Connect to backend to see convoy members.</Text>
+          ) : (
+            members.map(m => (
+              <View key={m.id} style={{ backgroundColor: '#222', borderRadius: 16, paddingVertical: 10, paddingHorizontal: 18, marginHorizontal: 6, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>{m.username}</Text>
               </View>
-            ))}
-          </View>
-          <PitStopRequest />
-          <ConvoyLeaderboard />
-          <TouchableOpacity style={[styles.leaveBtn, { borderColor: accentColor }]}> 
-            <Text style={[styles.leaveText, { color: accentColor }]}>Leave Convoy</Text>
-          </TouchableOpacity>
-        </BlurView>
+            ))
+          )}
+        </View>
+        <TouchableOpacity style={{ borderColor: '#8f5cff', borderWidth: 2, borderRadius: 16, alignItems: 'center', width: '100%', paddingVertical: 12, marginTop: 18 }}> 
+          <Text style={{ color: '#8f5cff', fontWeight: 'bold', fontSize: 18, letterSpacing: 1.2 }}>Leave Convoy</Text>
+        </TouchableOpacity>
       </View>
+      <PitStopRequest />
+      <ConvoyLeaderboard />
     </ScrollView>
   );
 };

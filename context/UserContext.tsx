@@ -6,6 +6,7 @@ export type Mood = 'Cruising' | 'Racing' | 'Photoshoot' | 'Pit Stop';
 export interface DriverProfile {
   role: 'driver';
   username: string;
+  email: string;
   carMake: string;
   carModel: string;
   carPhoto?: string;

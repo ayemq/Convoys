@@ -9,39 +9,9 @@ import EventPin from '../components/EventPin';
 
 const { width, height } = Dimensions.get('window');
 
-// Mock friends and events
-const mockFriends = [
-  {
-    id: '1',
-    username: 'FastFury',
-    carPhoto: undefined,
-    mood: 'Racing',
-    location: { latitude: 40.96, longitude: -74.07 },
-  },
-  {
-    id: '2',
-    username: 'PhotoQueen',
-    carPhoto: undefined,
-    mood: 'Photoshoot',
-    location: { latitude: 40.95, longitude: -74.08 },
-  },
-];
-const mockEvents = [
-  {
-    id: 'e1',
-    name: 'Cars & Coffee',
-    type: 'cars_and_coffee',
-    verified: true,
-    location: { latitude: 40.957, longitude: -74.06 },
-  },
-  {
-    id: 'e2',
-    name: 'Photo Meet',
-    type: 'photo_meet',
-    verified: false,
-    location: { latitude: 40.96, longitude: -74.09 },
-  },
-];
+// TODO: Replace with backend friends and events fetch
+const friends: any[] = []; // Placeholder for friends from backend
+const events: any[] = []; // Placeholder for events from backend
 
 const ExploreDriverMapScreen = () => {
   const { profile } = useUser();
@@ -54,9 +24,9 @@ const ExploreDriverMapScreen = () => {
   const userLocation = { latitude: 40.9584, longitude: -74.0723 };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#181C24' : '#f5f5f5' }]}> 
+    <View style={{ flex: 1, backgroundColor: '#000' }}> 
       <MapView
-        style={styles.map}
+        style={{ width: '100%', height: '60%' }}
         initialRegion={{
           ...userLocation,
           latitudeDelta: 0.05,
@@ -69,35 +39,35 @@ const ExploreDriverMapScreen = () => {
             <MapUserIcon imageUrl={profile.role === 'driver' ? profile.carPhoto : profile.clubLogo} mood={profile.mood} />
           </Marker>
         )}
-        {visibility !== 'ghost' && mockFriends.map(friend => (
+        {visibility !== 'ghost' && friends.map(friend => (
           <Marker key={friend.id} coordinate={friend.location} onPress={() => setSelectedFriend(friend)}>
             <MapUserIcon imageUrl={friend.carPhoto} mood={friend.mood} />
           </Marker>
         ))}
-        {mockEvents.map(event => (
+        {events.map(event => (
           <Marker key={event.id} coordinate={event.location} onPress={() => setSelectedEvent(event)}>
             <EventPin verified={event.verified} />
           </Marker>
         ))}
       </MapView>
-      <View style={styles.overlay}>
+      <View style={{ position: 'absolute', top: 40, left: 0, right: 0, alignItems: 'center' }}>
         <VisibilityToggle value={visibility} onChange={setVisibility} />
       </View>
       <Modal visible={!!selectedFriend} transparent animationType="fade">
-        <View style={styles.modalBg}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>{selectedFriend?.username}</Text>
-            <Text style={styles.modalText}>Mood: {selectedFriend?.mood}</Text>
-            <TouchableOpacity onPress={() => setSelectedFriend(null)} style={styles.closeBtn}><Text style={styles.closeText}>Close</Text></TouchableOpacity>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ backgroundColor: '#222', borderRadius: 18, padding: 28, alignItems: 'center', minWidth: 220 }}>
+            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 22, marginBottom: 8 }}>{selectedFriend?.username}</Text>
+            <Text style={{ color: '#fff', fontSize: 16, marginBottom: 16 }}>Mood: {selectedFriend?.mood}</Text>
+            <TouchableOpacity onPress={() => setSelectedFriend(null)} style={{ backgroundColor: '#8f5cff', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 24 }}><Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Close</Text></TouchableOpacity>
           </View>
         </View>
       </Modal>
       <Modal visible={!!selectedEvent} transparent animationType="fade">
-        <View style={styles.modalBg}>
-          <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>{selectedEvent?.name}</Text>
-            <Text style={styles.modalText}>{selectedEvent?.verified ? 'Verified Event' : 'Community Event'}</Text>
-            <TouchableOpacity onPress={() => setSelectedEvent(null)} style={styles.closeBtn}><Text style={styles.closeText}>Close</Text></TouchableOpacity>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ backgroundColor: '#222', borderRadius: 18, padding: 28, alignItems: 'center', minWidth: 220 }}>
+            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 22, marginBottom: 8 }}>{selectedEvent?.name}</Text>
+            <Text style={{ color: '#fff', fontSize: 16, marginBottom: 16 }}>{selectedEvent?.verified ? 'Verified Event' : 'Community Event'}</Text>
+            <TouchableOpacity onPress={() => setSelectedEvent(null)} style={{ backgroundColor: '#8f5cff', borderRadius: 12, paddingVertical: 8, paddingHorizontal: 24 }}><Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Close</Text></TouchableOpacity>
           </View>
         </View>
       </Modal>

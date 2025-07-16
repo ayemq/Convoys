@@ -7,6 +7,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useUser, UserRole, Mood } from '../context/UserContext';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 
 // Define the stack param list for navigation
 export type RootStackParamList = {
@@ -32,35 +33,25 @@ const SignupScreen = () => {
     ? ['#1A1A2E', '#16213E', '#0F3460'] as const
     : ['#667eea', '#764ba2', '#f093fb'] as const;
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!username || !password) {
       Alert.alert('Missing fields', 'Please enter your username and password.');
       return;
     }
-    // Mock login: set a minimal profile and go to home
-    setProfile({
-      role: 'driver',
-      username,
-      carMake: 'Honda',
-      carModel: 'Civic',
-      carPhoto: undefined,
-      modList: '',
-      horsepower: '',
-      mood: 'Cruising',
-      bio: '',
-      profileSetupComplete: true,
-    });
+    // TODO: Replace with backend login API call
+    Alert.alert('Not implemented', 'Login will be available once backend is connected.');
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!username || !password || !email) {
       Alert.alert('Missing fields', 'Please fill out all fields.');
       return;
     }
-    // Mock signup: set a minimal profile and go to profile setup
+    // TEMP: Allow navigation past signup for development. REMOVE before production/backend integration.
     setProfile({
       role: 'driver',
       username,
+      email,
       carMake: '',
       carModel: '',
       carPhoto: undefined,
@@ -70,6 +61,12 @@ const SignupScreen = () => {
       bio: '',
       profileSetupComplete: false,
     });
+    // END TEMP
+    // TODO: Replace with backend signup API call
+    // Example:
+    // const result = await signupApi({ username, password, email });
+    // if (result.success) setProfile(result.profile);
+    // Alert.alert('Not implemented', 'Signup will be available once backend is connected.');
   };
 
   return (

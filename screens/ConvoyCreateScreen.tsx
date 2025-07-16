@@ -8,11 +8,8 @@ const ConvoyCreateScreen = () => {
   const [destination, setDestination] = useState('');
   const [quickJoin, setQuickJoin] = useState(false);
   const [invited, setInvited] = useState<string[]>([]);
-  // Mock friends
-  const friends = [
-    { id: '1', username: 'FastFury' },
-    { id: '2', username: 'PhotoQueen' },
-  ];
+  // TODO: Replace with backend friends fetch
+  const friends: any[] = []; // Placeholder for friends from backend
   const accentColor =
     accent === 'orange' ? '#FF9100' : accent === 'blue' ? '#2196F3' : accent === 'red' ? '#F44336' : '#9C27B0';
 
@@ -21,37 +18,41 @@ const ConvoyCreateScreen = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#181C24' : '#f5f5f5' }]}> 
-      <BlurView intensity={70} tint={isDark ? 'dark' : 'light'} style={styles.card}>
-        <Text style={[styles.title, { color: accentColor }]}>Start a Convoy</Text>
-        <Text style={styles.label}>Destination</Text>
+    <View style={{ flex: 1, backgroundColor: '#000', justifyContent: 'center', alignItems: 'center', padding: 32 }}>
+      <View style={{ width: '100%', maxWidth: 400, backgroundColor: '#18181b', borderRadius: 20, padding: 28 }}>
+        <Text style={{ color: '#8f5cff', fontWeight: 'bold', fontSize: 24, marginBottom: 18, textAlign: 'left' }}>Start a Convoy</Text>
+        <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 8, textAlign: 'left' }}>Destination</Text>
         <TextInput
-          style={styles.input}
+          style={{ backgroundColor: '#222', color: '#fff', borderRadius: 12, padding: 10, marginBottom: 12, fontSize: 16, width: '100%', textAlign: 'left' }}
           value={destination}
           onChangeText={setDestination}
           placeholder="Enter destination or route"
           placeholderTextColor="#888"
         />
-        <View style={styles.row}>
-          <Text style={styles.label}>Quick Join</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 12 }}>
+          <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', textAlign: 'left' }}>Quick Join</Text>
           <Switch value={quickJoin} onValueChange={setQuickJoin} trackColor={{ true: accentColor, false: '#888' }} />
         </View>
-        <Text style={styles.label}>Invite Friends</Text>
-        <View style={styles.friendsRow}>
-          {friends.map(friend => (
-            <TouchableOpacity
-              key={friend.id}
-              style={[styles.friendBtn, invited.includes(friend.id) && { backgroundColor: accentColor }]}
-              onPress={() => toggleInvite(friend.id)}
-            >
-              <Text style={styles.friendText}>{friend.username}</Text>
-            </TouchableOpacity>
-          ))}
+        <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 8, textAlign: 'left' }}>Invite Friends</Text>
+        <View style={{ flexDirection: 'row', marginBottom: 18 }}>
+          {friends.length === 0 ? (
+            <Text style={{ color: '#aaa', fontSize: 16 }}>No friends to invite. Connect to backend to see friends.</Text>
+          ) : (
+            friends.map(friend => (
+              <TouchableOpacity
+                key={friend.id}
+                style={[{ backgroundColor: '#222', borderRadius: 16, paddingVertical: 10, paddingHorizontal: 18, marginHorizontal: 6, alignItems: 'center', justifyContent: 'center' }, invited.includes(friend.id) && { backgroundColor: accentColor }]}
+                onPress={() => toggleInvite(friend.id)}
+              >
+                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>{friend.username}</Text>
+              </TouchableOpacity>
+            ))
+          )}
         </View>
-        <TouchableOpacity style={[styles.createBtn, { backgroundColor: accentColor }]}> 
-          <Text style={styles.createText}>Create Convoy</Text>
+        <TouchableOpacity style={{ backgroundColor: '#8f5cff', borderRadius: 16, alignItems: 'center', width: '100%', paddingVertical: 14, marginTop: 18 }}> 
+          <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, letterSpacing: 1.2 }}>Create Convoy</Text>
         </TouchableOpacity>
-      </BlurView>
+      </View>
     </View>
   );
 };

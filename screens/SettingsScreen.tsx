@@ -152,44 +152,20 @@ const SettingsScreen = () => {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#0A0A0A' : '#F8F9FA' }]}>
-      {/* Header with gradient background */}
-      <LinearGradient colors={gradientColors} style={styles.headerGradient}>
-        <View style={styles.headerContent}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Settings</Text>
-          <View style={styles.placeholderButton} />
-        </View>
-      </LinearGradient>
-
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {settingsSections.map(section => (
-          <BlurView key={section.title} intensity={80} tint={isDark ? 'dark' : 'light'} style={styles.sectionCard}>
-            <Text style={styles.sectionTitle}>{section.title}</Text>
-            {section.items.map(renderSettingItem)}
-          </BlurView>
-        ))}
-
-        {/* Logout Button */}
-        <TouchableOpacity 
-          style={[styles.logoutBtn, { backgroundColor: '#FF6B6B' }]}
-          onPress={() => {}}
-        >
-          <Ionicons name="log-out" size={20} color="#fff" />
-          <Text style={styles.logoutText}>Log Out</Text>
+    <ScrollView style={{ flex: 1, backgroundColor: '#000' }} contentContainerStyle={{ padding: 32 }}>
+      <Text style={{ color: '#fff', fontSize: 28, fontWeight: 'bold', marginBottom: 24, textAlign: 'left' }}>Settings</Text>
+      <View style={{ backgroundColor: '#18181b', borderRadius: 20, padding: 24, marginBottom: 24 }}>
+        {/* Example setting */}
+        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginBottom: 12, textAlign: 'left' }}>Account</Text>
+        <TouchableOpacity style={{ backgroundColor: '#8f5cff', borderRadius: 12, padding: 16, marginBottom: 12 }}>
+          <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Edit Profile</Text>
         </TouchableOpacity>
-
-        <View style={styles.footer}>
-          <Text style={styles.versionText}>Convoys v1.0.0</Text>
-          <Text style={styles.copyrightText}>© 2024 Convoys App</Text>
-        </View>
-      </ScrollView>
-    </View>
+        <TouchableOpacity style={{ backgroundColor: '#18181b', borderRadius: 12, padding: 16, borderWidth: 1, borderColor: '#8f5cff' }}>
+          <Text style={{ color: '#8f5cff', fontWeight: 'bold', fontSize: 16 }}>Sign Out</Text>
+        </TouchableOpacity>
+      </View>
+      {/* Add more settings sections/cards as needed */}
+    </ScrollView>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,163 +7,142 @@ import { useTheme } from '../context/ThemeContext';
 import EventCard from '../components/EventCard';
 import { useNavigation } from '@react-navigation/native';
 
-const initialEvents = [
-  { id: 'e1', name: 'Cars & Coffee', verified: true, date: 'Today, 9:00 AM', attendees: 24 },
-  { id: 'e2', name: 'Photo Meet', verified: false, date: 'Tomorrow, 2:00 PM', attendees: 12 },
-  { id: 'e3', name: 'General Meet', verified: false, date: 'Saturday, 6:00 PM', attendees: 8 },
-];
+// TODO: Replace with backend events fetch
+const [events, setEvents] = useState([]); // Placeholder for events from backend
+const [modalVisible, setModalVisible] = useState(false);
+const [newEvent, setNewEvent] = useState({ name: '', verified: false });
+
+const handleCreateEvent = async () => {
+    if (!newEvent.name) return;
+    // TODO: Replace with backend event creation API call
+    // Example:
+    // const result = await createEventApi(newEvent);
+    // if (result.success) setEvents([...events, result.event]);
+    Alert.alert('Not implemented', 'Event creation will be available once backend is connected.');
+    setModalVisible(false);
+};
 
 const EventsListScreen = () => {
   const { isDark, accent } = useTheme();
   const navigation = useNavigation();
-  const [events, setEvents] = useState(initialEvents);
+  // TODO: Replace with backend events fetch
+  const [events, setEvents] = useState<any[]>([]); // Placeholder for events from backend
   const [modalVisible, setModalVisible] = useState(false);
   const [newEvent, setNewEvent] = useState({ name: '', verified: false });
 
-  const accentColor = accent === 'orange' ? '#FF6B35' : 
-                     accent === 'blue' ? '#4ECDC4' : 
-                     accent === 'red' ? '#FF6B6B' : '#A8E6CF';
-
-  const gradientColors = isDark 
-    ? ['#1A1A2E', '#16213E', '#0F3460'] as const
-    : ['#667eea', '#764ba2', '#f093fb'] as const;
-
-  const handleCreateEvent = () => {
+  const handleCreateEvent = async () => {
     if (!newEvent.name) return;
-    setEvents(prev => [
-      { 
-        id: `e${prev.length + 1}`, 
-        name: newEvent.name, 
-        verified: newEvent.verified,
-        date: 'TBD',
-        attendees: 0
-      },
-      ...prev,
-    ]);
-    setNewEvent({ name: '', verified: false });
+    // TODO: Replace with backend event creation API call
+    // Example:
+    // const result = await createEventApi(newEvent);
+    // if (result.success) setEvents([...events, result.event]);
+    Alert.alert('Not implemented', 'Event creation will be available once backend is connected.');
     setModalVisible(false);
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#0A0A0A' : '#F8F9FA' }]}>
-      {/* Header with gradient background */}
-      <LinearGradient colors={gradientColors} style={styles.headerGradient}>
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>Events</Text>
-          <Text style={styles.headerSubtitle}>Discover and join car meets</Text>
-        </View>
-      </LinearGradient>
-
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+    <View style={{ flex: 1, backgroundColor: '#000' }}>
+      <ScrollView contentContainerStyle={{ padding: 32 }} showsVerticalScrollIndicator={false}>
+        <Text style={{ color: '#fff', fontSize: 28, fontWeight: 'bold', marginBottom: 24, textAlign: 'left' }}>Events</Text>
         {/* Stats */}
-        <View style={styles.statsContainer}>
-          <BlurView intensity={80} tint={isDark ? 'dark' : 'light'} style={styles.statCard}>
-            <Text style={styles.statNumber}>{events.length}</Text>
-            <Text style={styles.statLabel}>Total Events</Text>
-          </BlurView>
-          <BlurView intensity={80} tint={isDark ? 'dark' : 'light'} style={styles.statCard}>
-            <Text style={styles.statNumber}>{events.filter(e => e.verified).length}</Text>
-            <Text style={styles.statLabel}>Verified</Text>
-          </BlurView>
-          <BlurView intensity={80} tint={isDark ? 'dark' : 'light'} style={styles.statCard}>
-            <Text style={styles.statNumber}>{events.reduce((sum, e) => sum + e.attendees, 0)}</Text>
-            <Text style={styles.statLabel}>Attendees</Text>
-          </BlurView>
+        <View style={{ flexDirection: 'row', marginBottom: 24 }}>
+          <View style={{ flex: 1, marginRight: 8, backgroundColor: '#18181b', borderRadius: 16, padding: 16 }}>
+            <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', marginBottom: 4 }}>{events.length}</Text>
+            <Text style={{ color: '#aaa', fontSize: 14 }}>Total Events</Text>
+          </View>
+          <View style={{ flex: 1, marginHorizontal: 4, backgroundColor: '#18181b', borderRadius: 16, padding: 16 }}>
+            <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', marginBottom: 4 }}>{events.filter(e => e.verified).length}</Text>
+            <Text style={{ color: '#aaa', fontSize: 14 }}>Verified</Text>
+          </View>
+          <View style={{ flex: 1, marginLeft: 8, backgroundColor: '#18181b', borderRadius: 16, padding: 16 }}>
+            <Text style={{ color: '#fff', fontSize: 20, fontWeight: 'bold', marginBottom: 4 }}>{events.reduce((sum, e) => sum + e.attendees, 0)}</Text>
+            <Text style={{ color: '#aaa', fontSize: 14 }}>Attendees</Text>
+          </View>
         </View>
-
         {/* Create Event Button */}
         <TouchableOpacity 
-          style={[styles.createBtn, { backgroundColor: accentColor }]} 
+          style={{ backgroundColor: '#8f5cff', borderRadius: 16, paddingVertical: 16, alignItems: 'center', marginBottom: 20 }} 
           onPress={() => setModalVisible(true)}
         >
           <Ionicons name="add" size={20} color="#fff" />
-          <Text style={styles.createText}>Create Event</Text>
+          <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16, marginLeft: 8 }}>Create Event</Text>
         </TouchableOpacity>
-
         {/* Events List */}
-        <BlurView intensity={80} tint={isDark ? 'dark' : 'light'} style={styles.eventsCard}>
-          <Text style={styles.sectionTitle}>Upcoming Events</Text>
-          {events.map(event => (
-            <TouchableOpacity 
-              key={event.id} 
-              onPress={() => navigation.navigate('EventDetail' as never)}
-              style={styles.eventItem}
-            >
-              <View style={styles.eventInfo}>
-                <View style={styles.eventHeader}>
-                  <Text style={styles.eventName}>{event.name}</Text>
-                  {event.verified && (
-                    <View style={[styles.verifiedBadge, { backgroundColor: accentColor }]}>
-                      <Ionicons name="shield-checkmark" size={12} color="#fff" />
+        <View style={{ backgroundColor: '#18181b', borderRadius: 20, padding: 20 }}>
+          <Text style={{ color: '#fff', fontSize: 18, fontWeight: 'bold', marginBottom: 16, textAlign: 'left' }}>Upcoming Events</Text>
+          {events.length === 0 ? (
+            <Text style={{ color: '#aaa', fontSize: 16 }}>No events yet. Connect to backend to see events.</Text>
+          ) : (
+            events.map(event => (
+              <TouchableOpacity 
+                key={event.id} 
+                onPress={() => navigation.navigate('EventDetail' as never)}
+                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.1)' }}
+              >
+                <View style={{ flex: 1 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 4 }}>
+                    <Text style={{ color: '#fff', fontSize: 16, fontWeight: '600', marginRight: 8 }}>{event.name}</Text>
+                    {event.verified && (
+                      <View style={{ width: 20, height: 20, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: '#8f5cff' }}>
+                        <Ionicons name="shield-checkmark" size={12} color="#fff" />
+                      </View>
+                    )}
+                  </View>
+                  <View style={{ flexDirection: 'row', gap: 12 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <Ionicons name="time" size={14} color="rgba(255,255,255,0.7)" />
+                      <Text style={{ color: '#aaa', fontSize: 14 }}>{event.date}</Text>
                     </View>
-                  )}
-                </View>
-                <View style={styles.eventDetails}>
-                  <View style={styles.eventDetail}>
-                    <Ionicons name="time" size={14} color="rgba(255,255,255,0.7)" />
-                    <Text style={styles.eventDate}>{event.date}</Text>
-                  </View>
-                  <View style={styles.eventDetail}>
-                    <Ionicons name="people" size={14} color="rgba(255,255,255,0.5)" />
-                    <Text style={styles.eventAttendees}>{event.attendees} attending</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                      <Ionicons name="people" size={14} color="rgba(255,255,255,0.5)" />
+                      <Text style={{ color: '#aaa', fontSize: 12 }}>{event.attendees} attending</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-              <Text style={styles.eventArrow}>→</Text>
-            </TouchableOpacity>
-          ))}
-        </BlurView>
+                <Text style={{ color: '#aaa', fontSize: 18, fontWeight: 'bold' }}>→</Text>
+              </TouchableOpacity>
+            ))
+          )}
+        </View>
       </ScrollView>
-
       {/* Create Event Modal */}
       <Modal visible={modalVisible} transparent animationType="fade">
-        <View style={styles.modalBg}>
-          <BlurView intensity={80} tint={isDark ? 'dark' : 'light'} style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Create New Event</Text>
-            <Text style={styles.modalSubtitle}>Organize a car meet for the community</Text>
-            
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Event Name</Text>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 20 }}>
+          <View style={{ width: '100%', maxWidth: 340, borderRadius: 20, padding: 24, backgroundColor: '#18181b' }}>
+            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 20, marginBottom: 4 }}>Create New Event</Text>
+            <Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14, marginBottom: 20 }}>Organize a car meet for the community</Text>
+            <View style={{ marginBottom: 20 }}>
+              <Text style={{ fontWeight: '600', fontSize: 16, color: '#fff', marginBottom: 8 }}>Event Name</Text>
               <TextInput
-                style={styles.input}
+                style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff', borderRadius: 12, paddingVertical: 16, paddingHorizontal: 16, fontSize: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' }}
                 value={newEvent.name}
                 onChangeText={name => setNewEvent(ev => ({ ...ev, name }))}
                 placeholder="e.g., Cars & Coffee, Photo Meet"
                 placeholderTextColor="rgba(255,255,255,0.5)"
               />
             </View>
-            
             <TouchableOpacity
-              style={[
-                styles.verifyBtn, 
-                { 
-                  borderColor: accentColor, 
-                  backgroundColor: newEvent.verified ? accentColor : 'rgba(255,255,255,0.1)' 
-                }
-              ]}
+              style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 16, marginBottom: 24, gap: 8, borderColor: '#8f5cff', backgroundColor: newEvent.verified ? '#8f5cff' : 'rgba(255,255,255,0.1)' }}
               onPress={() => setNewEvent(ev => ({ ...ev, verified: !ev.verified }))}
             >
-              <Ionicons name="shield-checkmark" size={16} color={newEvent.verified ? '#fff' : accentColor} />
-              <Text style={[styles.verifyText, { color: newEvent.verified ? '#fff' : accentColor }]}>
-                {newEvent.verified ? '✓' : '○'} Verified Club Event
-              </Text>
+              <Ionicons name="shield-checkmark" size={16} color={newEvent.verified ? '#fff' : '#8f5cff'} />
+              <Text style={{ fontWeight: '600', fontSize: 16, color: newEvent.verified ? '#fff' : '#8f5cff' }}>{newEvent.verified ? '✓' : '○'} Verified Club Event</Text>
             </TouchableOpacity>
-            
-            <View style={styles.modalRow}>
+            <View style={{ flexDirection: 'row', gap: 12 }}>
               <TouchableOpacity 
-                style={[styles.modalBtn, { backgroundColor: '#666' }]} 
+                style={{ flex: 1, borderRadius: 12, paddingVertical: 12, alignItems: 'center', backgroundColor: '#666' }} 
                 onPress={() => setModalVisible(false)}
               >
-                <Text style={styles.modalBtnText}>Cancel</Text>
+                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={[styles.modalBtn, { backgroundColor: accentColor }]} 
+                style={{ flex: 1, borderRadius: 12, paddingVertical: 12, alignItems: 'center', backgroundColor: '#8f5cff' }} 
                 onPress={handleCreateEvent}
               >
-                <Text style={styles.modalBtnText}>Create Event</Text>
+                <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 16 }}>Create Event</Text>
               </TouchableOpacity>
             </View>
-          </BlurView>
+          </View>
         </View>
       </Modal>
     </View>

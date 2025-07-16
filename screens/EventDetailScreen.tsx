@@ -4,55 +4,28 @@ import { BlurView } from 'expo-blur';
 import { useTheme } from '../context/ThemeContext';
 import { useRoute } from '@react-navigation/native';
 
-const mockEventDetails = {
-  e1: {
-    name: 'Cars & Coffee',
-    verified: true,
-    description: 'A relaxed morning meet for car enthusiasts. Coffee and pastries provided.',
-    rules: 'No burnouts. Respect the lot. Family friendly.',
-    time: 'Sat, 9am - 12pm',
-    location: '123 Main St, San Francisco',
-  },
-  e2: {
-    name: 'Photo Meet',
-    verified: false,
-    description: 'Bring your ride for a group photoshoot. All builds welcome.',
-    rules: 'Be on time. Park as directed.',
-    time: 'Sun, 2pm - 5pm',
-    location: 'Pier 39, San Francisco',
-  },
-  e3: {
-    name: 'General Meet',
-    verified: false,
-    description: 'Open meet for all car clubs and solo drivers.',
-    rules: 'No revving. No littering.',
-    time: 'Fri, 7pm - 10pm',
-    location: 'Mall Parking Lot, Daly City',
-  },
-};
+// TODO: Replace with backend event details fetch
+const event: any = undefined; // Placeholder for event data from backend
 
 const EventDetailScreen = () => {
   const { isDark } = useTheme();
   const route = useRoute();
   // @ts-ignore
   const { eventId } = route.params || { eventId: 'e1' };
-  const event = mockEventDetails[eventId as keyof typeof mockEventDetails];
-  if (!event) return <View style={styles.centered}><Text style={styles.text}>Event not found.</Text></View>;
+  if (!event) return <View style={{ flex: 1, backgroundColor: '#000', justifyContent: 'center', alignItems: 'center' }}><Text style={{ color: '#fff', fontSize: 20 }}>Event details will appear here once connected to backend.</Text></View>;
   return (
-    <ScrollView style={{ backgroundColor: isDark ? '#181C24' : '#f5f5f5' }} contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.container}> 
-        <BlurView intensity={70} tint={isDark ? 'dark' : 'light'} style={styles.card}>
-          <Text style={styles.name}>{event.name}</Text>
-          {event.verified && <Text style={styles.verified}>✔️ Verified Event</Text>}
-          <Text style={styles.label}>Description</Text>
-          <Text style={styles.text}>{event.description}</Text>
-          <Text style={styles.label}>Rules</Text>
-          <Text style={styles.text}>{event.rules}</Text>
-          <Text style={styles.label}>Time</Text>
-          <Text style={styles.text}>{event.time}</Text>
-          <Text style={styles.label}>Location</Text>
-          <Text style={styles.text}>{event.location}</Text>
-        </BlurView>
+    <ScrollView style={{ backgroundColor: '#000' }} contentContainerStyle={{ padding: 32 }}>
+      <View style={{ backgroundColor: '#18181b', borderRadius: 20, padding: 28 }}>
+        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 24, marginBottom: 12, textAlign: 'left' }}>{event.name}</Text>
+        {event.verified && <Text style={{ color: '#8f5cff', fontWeight: 'bold', fontSize: 16, marginBottom: 12, textAlign: 'left' }}>✔️ Verified Event</Text>}
+        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 2, textAlign: 'left' }}>Description</Text>
+        <Text style={{ color: '#aaa', fontSize: 16, marginBottom: 2, textAlign: 'left' }}>{event.description}</Text>
+        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 2, textAlign: 'left' }}>Rules</Text>
+        <Text style={{ color: '#aaa', fontSize: 16, marginBottom: 2, textAlign: 'left' }}>{event.rules}</Text>
+        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 2, textAlign: 'left' }}>Time</Text>
+        <Text style={{ color: '#aaa', fontSize: 16, marginBottom: 2, textAlign: 'left' }}>{event.time}</Text>
+        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 2, textAlign: 'left' }}>Location</Text>
+        <Text style={{ color: '#aaa', fontSize: 16, marginBottom: 2, textAlign: 'left' }}>{event.location}</Text>
       </View>
     </ScrollView>
   );

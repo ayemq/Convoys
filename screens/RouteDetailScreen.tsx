@@ -4,42 +4,26 @@ import { BlurView } from 'expo-blur';
 import { useTheme } from '../context/ThemeContext';
 import { useRoute } from '@react-navigation/native';
 
-const mockRouteDetails = {
-  r1: {
-    name: 'Pacific Coast Highway',
-    desc: 'Scenic ocean drive from SF to LA.',
-    waypoints: ['San Francisco', 'Half Moon Bay', 'Santa Cruz', 'Big Sur', 'Los Angeles'],
-  },
-  r2: {
-    name: 'Skyline Blvd',
-    desc: 'Twisty mountain road with epic views.',
-    waypoints: ['San Bruno', 'Skyline Blvd', "Alice's Restaurant", 'La Honda'],
-  },
-  r3: {
-    name: 'Napa Valley Loop',
-    desc: 'Wine country cruise through vineyards.',
-    waypoints: ['Napa', 'Yountville', 'St. Helena', 'Calistoga', 'Napa'],
-  },
-};
+// TODO: Replace with backend route details fetch
+const routeData: any = undefined; // Placeholder for route data from backend
 
 const RouteDetailScreen = () => {
   const { isDark } = useTheme();
   const route = useRoute();
   // @ts-ignore
   const { routeId } = route.params || { routeId: 'r1' };
-  const routeData = mockRouteDetails[routeId as keyof typeof mockRouteDetails];
-  if (!routeData) return <View style={styles.centered}><Text style={styles.text}>Route not found.</Text></View>;
+  // TODO: Replace with backend route details fetch
+  const routeData = undefined as any; // Placeholder for route data from backend
+  if (!routeData) return <View style={{ flex: 1, backgroundColor: '#000', justifyContent: 'center', alignItems: 'center' }}><Text style={{ color: '#fff', fontSize: 20 }}>Route details will appear here once connected to backend.</Text></View>;
   return (
-    <ScrollView style={{ backgroundColor: isDark ? '#181C24' : '#f5f5f5' }} contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.container}> 
-        <BlurView intensity={70} tint={isDark ? 'dark' : 'light'} style={styles.card}>
-          <Text style={styles.name}>{routeData.name}</Text>
-          <Text style={styles.desc}>{routeData.desc}</Text>
-          <Text style={styles.label}>Waypoints</Text>
-          {routeData.waypoints.map((wp, i) => (
-            <Text key={i} style={styles.text}>{wp}</Text>
-          ))}
-        </BlurView>
+    <ScrollView style={{ backgroundColor: '#000' }} contentContainerStyle={{ padding: 32 }}>
+      <View style={{ backgroundColor: '#18181b', borderRadius: 20, padding: 28 }}>
+        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 24, marginBottom: 12, textAlign: 'left' }}>{routeData && routeData.name ? routeData.name : ''}</Text>
+        <Text style={{ color: '#aaa', fontSize: 16, marginBottom: 10, textAlign: 'left' }}>{routeData && routeData.desc ? routeData.desc : ''}</Text>
+        <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginTop: 12, marginBottom: 2, textAlign: 'left' }}>Waypoints</Text>
+        {(routeData && routeData.waypoints ? routeData.waypoints : []).map((wp: any, i: number) => (
+          <Text key={i} style={{ color: '#fff', fontSize: 16, marginBottom: 2, textAlign: 'left' }}>{wp}</Text>
+        ))}
       </View>
     </ScrollView>
   );

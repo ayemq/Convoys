@@ -9,6 +9,7 @@ import ConvoyDashboardScreen from '../screens/ConvoyDashboardScreen';
 import WhereToGoSelectionScreen from '../screens/WhereToGoSelectionScreen';
 import { useTheme } from '../context/ThemeContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -26,17 +27,29 @@ function HomeStackNavigator() {
 
 const BottomTabNavigator = () => {
   const { isDark, accent } = useTheme();
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: isDark ? '#181C24' : '#fff',
+          backgroundColor: '#000',
           borderTopWidth: 0,
+          height: 40 + insets.bottom,
+          paddingBottom: 18 + insets.bottom,
+          paddingTop: 8,
         },
-        tabBarActiveTintColor: accent === 'orange' ? '#FF9100' : accent === 'blue' ? '#2196F3' : accent === 'red' ? '#F44336' : '#9C27B0',
-        tabBarInactiveTintColor: isDark ? '#888' : '#aaa',
-      }}
+        tabBarActiveTintColor: '#8f5cff', // Always purple for selected icon
+        tabBarInactiveTintColor: '#888',
+        tabBarLabelStyle: {
+          fontWeight: 'bold',
+          fontSize: 14,
+          marginBottom: 4,
+        },
+        tabBarIconStyle: {
+          marginTop: 2,
+        },
+      })}
     >
       <Tab.Screen
         name="Home"
