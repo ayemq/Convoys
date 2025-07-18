@@ -7,7 +7,7 @@ const AccountTypeSelectionScreen = () => {
   return (
     <View style={{ flex: 1, backgroundColor: '#000', justifyContent: 'center', alignItems: 'center', padding: 32 }}>
       <Text style={{ color: '#fff', fontSize: 28, fontWeight: 'bold', marginBottom: 32, textAlign: 'left', width: '100%' }}>
-        Create your Convoy account
+        Create your Convoys account
       </Text>
       <TouchableOpacity
         style={{ backgroundColor: '#8f5cff', borderRadius: 30, paddingVertical: 14, paddingHorizontal: 40, marginBottom: 24, width: '100%', alignItems: 'flex-start' }}
